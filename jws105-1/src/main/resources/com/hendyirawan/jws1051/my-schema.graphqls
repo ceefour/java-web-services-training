@@ -13,7 +13,7 @@ type Country {
     surfaceArea: String
     indepYear: String
     population: String
-    lifeExpectancy: String
+    lifeExpectancy: Float
     gnp: Float
     gnpOld: Float
     localName: String

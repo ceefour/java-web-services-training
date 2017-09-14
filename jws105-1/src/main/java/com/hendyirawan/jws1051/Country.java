@@ -21,7 +21,7 @@ public class Country implements Serializable {
     private String indepYear;
     private String population;
     @Column(name = "lifeexpectancy")
-    private String lifeExpectancy;
+    private Float lifeExpectancy;
     private BigDecimal gnp;
     @Column(name = "gnpold")
     private BigDecimal gnpOld;
@@ -90,11 +90,11 @@ public class Country implements Serializable {
         this.population = population;
     }
 
-    public String getLifeExpectancy() {
+    public Float getLifeExpectancy() {
         return lifeExpectancy;
     }
 
-    public void setLifeExpectancy(String lifeExpectancy) {
+    public void setLifeExpectancy(Float lifeExpectancy) {
         this.lifeExpectancy = lifeExpectancy;
     }
 
