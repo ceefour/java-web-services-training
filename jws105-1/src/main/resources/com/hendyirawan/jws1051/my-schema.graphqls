@@ -1,0 +1,25 @@
+type Query {
+    countries: [Country!]
+}
+
+# Country in the world
+type Country {
+    # ISO 3-letter country code
+    code: ID!
+    # Formal name of country
+    name: String!
+    continent: String
+    region: String
+    surfaceArea: String
+    indepYear: String
+    population: String
+    lifeExpectancy: Float
+    gnp: Float
+    gnpOld: Float
+    localName: String
+    governmentForm: String
+    headOfState: String
+    capital: Int
+    # ISO 2-letter country code
+    code2: String
+}
