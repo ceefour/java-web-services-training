@@ -14,10 +14,10 @@ public class Country implements Serializable {
     private String continent;
     private String region;
     @Column(name = "surfacearea")
-    private String surfaceArea;
+    private Float surfaceArea;
     @Column(name = "indepyear")
-    private String indepYear;
-    private String population;
+    private Short indepYear;
+    private Integer population;
     @Column(name = "lifeexpectancy")
     private Float lifeExpectancy;
     private BigDecimal gnp;
@@ -67,27 +67,27 @@ public class Country implements Serializable {
         this.region = region;
     }
 
-    public String getSurfaceArea() {
+    public Float getSurfaceArea() {
         return surfaceArea;
     }
 
-    public void setSurfaceArea(String surfaceArea) {
+    public void setSurfaceArea(Float surfaceArea) {
         this.surfaceArea = surfaceArea;
     }
 
-    public String getIndepYear() {
+    public Short getIndepYear() {
         return indepYear;
     }
 
-    public void setIndepYear(String indepYear) {
+    public void setIndepYear(Short indepYear) {
         this.indepYear = indepYear;
     }
 
-    public String getPopulation() {
+    public Integer getPopulation() {
         return population;
     }
 
-    public void setPopulation(String population) {
+    public void setPopulation(Integer population) {
         this.population = population;
     }
 
