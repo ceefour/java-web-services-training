@@ -2,13 +2,10 @@ package com.hendyirawan.jws1033;
 
 import com.google.common.collect.ImmutableList;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,6 +14,8 @@ import java.util.Optional;
 
 @Component
 @Path("/countries")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class CountriesController {
 
     private final List<Country> countries = new ArrayList<>();
@@ -28,13 +27,10 @@ public class CountriesController {
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Collection getAllCountries(@Context UriInfo uriInfo) {
-        String query = uriInfo.getRequestUri().getQuery();
-        System.out.println(query);
+    public Collection getAllCountries(@QueryParam("sort") String sort) {
         final ImmutableList<Country> sortedCountries;
         // Get query parameter
-        if ("sort=name,asc".equals(query)) {
+        if ("name,desc".equals(sort)) {
             sortedCountries = ImmutableList.sortedCopyOf(
                     (a, b) -> b.getCode().compareTo(a.getCode()), this.countries);
         } else {
@@ -53,9 +49,8 @@ public class CountriesController {
     }
 
     @GET
-    @Produces("application/json")
     @Path("/{code}")
-    public Country getBook(@PathParam("code") String code) {
+    public Country getCountry(@PathParam("code") String code) {
         Optional<Country> country = countries.stream().filter(it -> code.equals(it.getCode())).findAny();
         if(country.isPresent()) {
             return country.get();
@@ -64,17 +59,14 @@ public class CountriesController {
     }
 
     @POST
-    @Produces("application/json")
-    @Consumes("application/json")
     public Response addCountry(Country country) {
         countries.add(country);
         return Response.created(URI.create("/" + country.getCode())).build();
     }
 
     @PUT
-    @Consumes("application/json")
     @Path("/{code}")
-    public Response updateBook(@PathParam("code") String code, Country country) {
+    public Response updateCountry(@PathParam("code") String code, Country country) {
         Optional<Country> found = countries.stream().filter(it -> code.equals(it.getCode())).findAny();
         if(found.isPresent()) {
             found.get().setCode(country.getCode());
@@ -89,7 +81,7 @@ public class CountriesController {
 
     @DELETE
     @Path("/{code}")
-    public Response deleteBook(@PathParam("code") String code) {
+    public Response deleteCountry(@PathParam("code") String code) {
         Optional<Country> found = countries.stream().filter(it -> code.equals(it.getCode())).findAny();
         if(found.isPresent()) {
             countries.remove(found.get());
