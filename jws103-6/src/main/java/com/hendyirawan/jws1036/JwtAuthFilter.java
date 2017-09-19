@@ -11,11 +11,22 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Token for hendy:
+ * eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZW5keSJ9.67HHM7EOdT-gyetGhgqY74oxbM3_EncIUI_nJooYbcM
+ *
+ * Token for denny:
+ * eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZW5ueSJ9.o-PAdC7gKC0sebeh7Ij-NPSpUF1hs7FWPgM2Z_vG0_E
+ */
 @Component
 public class JwtAuthFilter implements Filter {
     private static final Logger LOG = LoggerFactory.getLogger(JwtAuthFilter.class);
+
+//    @Autowired
+//    private ObjectMapper mapper;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -23,9 +34,10 @@ public class JwtAuthFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        boolean allowed = true;
         if (request instanceof HttpServletRequest) {
+            boolean allowed = true;
             HttpServletRequest httpReq = (HttpServletRequest) request;
+            HttpServletResponse httpResp = (HttpServletResponse) response;
             if (!"OPTIONS".equals(httpReq.getMethod())) {
                 String authorization = httpReq.getHeader("Authorization");
                 Preconditions.checkNotNull(authorization,
@@ -45,11 +57,18 @@ public class JwtAuthFilter implements Filter {
 
                 allowed = "hendy".equals(userId); // any custom logic here
             }
-        }
-        if (allowed) {
-            chain.doFilter(request, response);
+            if (allowed) {
+                chain.doFilter(request, response);
+            } else {
+                httpResp.setStatus(403);
+                httpResp.setHeader("Content-Type", "application/json");
+                httpResp.getWriter().write(
+                        "{\"error\": \"Unauthorized\", \"message\": \"Access denied\"}");
+//                mapper.writeValue(httpResp.getWriter(),
+//                        new Error("Unauthorized", "Access denied"));
+            }
         } else {
-            throw new AccessDeniedException("Access denied");
+            chain.doFilter(request, response);
         }
     }
 
