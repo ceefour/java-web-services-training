@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class GetJsonNodeApplication {
+ public class GetJsonNodeApplication {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GetJsonNodeApplication.class);
 
